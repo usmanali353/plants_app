@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "123777094328",
+    "firebase_url": "https://plants-app-f68aa.firebaseio.com",
+    "project_id": "plants-app-f68aa",
+    "storage_bucket": "plants-app-f68aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123777094328:android:149f148bbb522ba598da4d",
+        "android_client_info": {
+          "package_name": "fyp.plantsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "123777094328-qnvtob2pe0trl3umubjup8gc50me0vbd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "fyp.plantsapp",
+            "certificate_hash": "9a279ea39b23967fc6230dae41e9290a9bb23718"
+          }
+        },
+        {
+          "client_id": "123777094328-1r24n2ka03n14n5urjnns22kam0ks3hn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDokwFATjK980zK1Lcsk4_ZsLgI2ecD1qY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "123777094328-1r24n2ka03n14n5urjnns22kam0ks3hn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

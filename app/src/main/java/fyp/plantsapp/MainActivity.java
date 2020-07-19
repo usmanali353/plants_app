@@ -1,6 +1,6 @@
 package fyp.plantsapp;
-
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,130 +8,134 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ImageView;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
 import com.example.easywaylocation.EasyWayLocation;
 import com.example.easywaylocation.Listener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import fyp.plantsapp.Utilities.Forecast;
 import fyp.plantsapp.Utilities.ForecastAdapter;
-import fyp.plantsapp.Utilities.RemoteFetch;
 import fyp.plantsapp.Utilities.SetListViewHeight;
-import fyp.plantsapp.Utilities.fetch_five_day_weather;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 
 
 public class MainActivity extends AppCompatActivity implements Listener {
     private TextView mTemp, mHumidity, mTempHigh, mTempLow, mName, mWeather;
     TextView mWeatherIcon;
     private ListView mListViewForecast;
-    String lat,lng;
     SharedPreferences prefs;
     EasyWayLocation easyWayLocation;
+    ActionBarDrawerToggle actionBarDrawerToggle;
+    DrawerLayout drawerLayout;
+    NavigationView nv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        prefs= PreferenceManager.getDefaultSharedPreferences(this);
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        lbm.registerReceiver(receiver, new IntentFilter("weather_json"));
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Typeface weatherFont = Typeface.createFromAsset(getAssets(), "fonts/Weather-Fonts.ttf");
         Typeface robotoThin = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
         Typeface robotoLight = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.inflateMenu(R.menu.menu_main);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Weather");
+        mListViewForecast =  findViewById(R.id.listView);
+        mTemp = findViewById(R.id.temp);
+        nv=findViewById(R.id.nav_view);
+        mHumidity = findViewById(R.id.humidity);
+        mTempHigh =  findViewById(R.id.tempHigh);
+        mTempLow =  findViewById(R.id.tempLow);
+        mName =  findViewById(R.id.name);
+        mWeather = findViewById(R.id.weather);
+        mWeatherIcon =  findViewById(R.id.weatherIcon);
+        mWeatherIcon.setTypeface(weatherFont);
+        mTemp.setTypeface(robotoThin);
+        mName.setTypeface(robotoLight);
+        mWeather.setTypeface(robotoLight);
+        drawerLayout=findViewById(R.id.drawer_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(
+                MainActivity.this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close
+        );
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if(item.getItemId()==R.id.sign_out){
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if(item.getItemId()==R.id.farming_procedures){
+
+                }else if(item.getItemId()==R.id.crop_videos){
+                    startActivity(new Intent(MainActivity.this,crop_Videos.class));
+                }else if(item.getItemId()==R.id.help){
+                    startActivity(new Intent(MainActivity.this,chatbot.class));
+                }else if(item.getItemId()==R.id.sign_out){
                     FirebaseAuth.getInstance().signOut();
+                    prefs.edit().remove("user_info").apply();
                     startActivity(new Intent(MainActivity.this,Login.class));
                     finish();
                 }
                 return true;
             }
         });
-        mListViewForecast = (ListView) findViewById(R.id.listView);
-        mListViewForecast.setEnabled(false);
-        mTemp = (TextView) findViewById(R.id.temp);
-        mHumidity = (TextView) findViewById(R.id.humidity);
-        mTempHigh = (TextView) findViewById(R.id.tempHigh);
-        mTempLow = (TextView) findViewById(R.id.tempLow);
-        mName = (TextView) findViewById(R.id.name);
-        mWeather = (TextView) findViewById(R.id.weather);
-        mWeatherIcon = (TextView) findViewById(R.id.weatherIcon);
-
-        mWeatherIcon.setTypeface(weatherFont);
-        mTemp.setTypeface(robotoThin);
-        mName.setTypeface(robotoLight);
-        mWeather.setTypeface(robotoLight);
+//        chatBot.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
+//        cropVideo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
+        LocationRequest request = new LocationRequest();
+        request.setInterval(10000);
+        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        easyWayLocation = new EasyWayLocation(this,request, false, this);
         //arrayListForecast = new ArrayList<>();
-        easyWayLocation = new EasyWayLocation(this, true,this);
-        if(lat!=null&&lng!=null){
-
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        easyWayLocation.endUpdates();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        easyWayLocation.startLocation();
-    }
-
-
-
-
-    public BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent != null) {
-                String json = intent.getStringExtra("weather_json");
-                try {
-                    JSONObject obj = new JSONObject(json);
-                    JSONArray weather_short_info_array = obj.getJSONArray("weather");
-                    mWeather.setText(weather_short_info_array.getJSONObject(0).getString("description"));
-                    JSONObject waather_detail_info_obj = obj.getJSONObject("main");
-                    mTemp.setText(waather_detail_info_obj.getString("temp") + (char) 0x00B0);
-                    mHumidity.setText(waather_detail_info_obj.getString("humidity"));
-                    mTempHigh.setText("MAX " + waather_detail_info_obj.getString("temp_max") + (char) 0x00B0);
-                    mTempLow.setText("MIN " + waather_detail_info_obj.getString("temp_min") + (char) 0x00B0);
-                     setWeatherIcon(weather_short_info_array.getJSONObject(0).getInt("id"),mWeatherIcon);
-                    mName.setText(obj.getString("name"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                easyWayLocation.startLocation();
+            } else {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1000);
             }
         }
-    };
+    }
+
+    @Override
+    protected void onDestroy() {
+        easyWayLocation.endUpdates();
+        super.onDestroy();
+    }
 
     private void setWeatherIcon(int actualId, TextView txt) {
         int id = actualId / 100;
@@ -165,7 +169,11 @@ public class MainActivity extends AppCompatActivity implements Listener {
             txt.setText(icon);
         }
     }
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        easyWayLocation.endUpdates();
+    }
     @Override
     public void locationOn() {
 
@@ -173,17 +181,111 @@ public class MainActivity extends AppCompatActivity implements Listener {
 
     @Override
     public void currentLocation(Location location) {
-        if(location!=null) {
-            lat= String.valueOf(location.getLatitude());
-            lng=String.valueOf(location.getLongitude());
-            new RemoteFetch(MainActivity.this).execute(lat, lng);
-            new fetch_five_day_weather(MainActivity.this, mListViewForecast).execute(lat, lng);
-
+        if (location != null) {
+           try{
+               List<Address> addresses=new Geocoder(MainActivity.this).getFromLocation(location.getLatitude(),location.getLongitude(),1);
+               mName.setText(addresses.get(0).getLocality());
+               new fetch_weather().execute(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+           }catch (Exception e){
+               e.printStackTrace();
+           }
         }
     }
 
     @Override
     public void locationCancelled() {
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1000:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    easyWayLocation.startLocation();
+//                            new RemoteFetch(this).execute(lat,lng);
+//                            new fetch_five_day_weather(this,mListViewForecast).execute(lat,lng);
+                    } else {
+                        Toast.makeText(MainActivity.this, "We need acess to location to view Weather", Toast.LENGTH_LONG).show();
+                        // Explain to the user that the feature is unavailable because
+                        // the features requires a permission that the user has denied.
+                        // At the same time, respect the user's decision. Don't link to
+                        // system settings in an effort to convince the user to change
+                        // their decision.
+                    }
+        }
+    }
+
+    //One Call Weather Api
+    class fetch_weather extends AsyncTask<String,Void,String>{
+    ProgressDialog pd;
+     StringBuilder json;
+     ArrayList<Forecast> forecasts;
+        public fetch_weather() {
+            this.pd = new ProgressDialog(MainActivity.this);
+            this.pd.setMessage("Fetching Weather");
+            json=new StringBuilder();
+            forecasts=new ArrayList<>();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if(!pd.isShowing()){
+                pd.show();
+            }
+        }
+        @Override
+        protected String doInBackground(String... strings) {
+            try{
+                URL url=new URL("https://api.openweathermap.org/data/2.5/onecall?lat="+strings[0]+"&"+"lon="+strings[1]+"&"+"appid=d9162a43685ed20605c4736f1a7a01c1"+"&"+"exclude=hourly,minutely,current"+"&"+"units=metric");
+                Log.e("url",url.toString());
+
+                HttpURLConnection connection= (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setDoInput(true);connection.setDoOutput(true);
+                BufferedReader reader=new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;
+                while((line=reader.readLine())!=null){
+                    json.append(line);
+                }
+                Log.e("connection_status",String.valueOf(connection.getResponseCode()));
+                Log.e("fetched",json.toString());
+             return json.toString();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
+            return json.toString();
+        }
+        @Override
+        protected void onPostExecute(String s) {
+            pd.dismiss();
+            easyWayLocation.endUpdates();
+            if(s!=null){
+                Log.e("fetched_weather",s);
+                try {
+                    JSONObject weatherObj=new JSONObject(s);
+                    JSONArray sevenDayWeatherArray=weatherObj.getJSONArray("daily");
+                    mHumidity.setText(String.valueOf(sevenDayWeatherArray.getJSONObject(0).get("humidity")));
+                    mTemp.setText(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0);
+                    mTempLow.setText("MIN: "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("min")) + (char) 0x00B0);
+                    mTempHigh.setText("MAX: "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("max")) + (char) 0x00B0);
+                    mWeather.setText(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")));
+                    setWeatherIcon(Integer.parseInt(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("id"))),mWeatherIcon);
+                    for(int i=1;i<sevenDayWeatherArray.length();i++){
+                       forecasts.add(new Forecast(String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONObject("temp").get("max")),String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONObject("temp").get("min")),String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONArray("weather").getJSONObject(0).get("description")),String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONArray("weather").getJSONObject(0).get("id")),String.valueOf(sevenDayWeatherArray.getJSONObject(i).get("dt"))));
+                    }
+                    mListViewForecast.setAdapter(new ForecastAdapter(MainActivity.this,forecasts));
+                   // SetListViewHeight.setListViewHeight(mListViewForecast);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+            super.onPostExecute(s);
+        }
     }
 }

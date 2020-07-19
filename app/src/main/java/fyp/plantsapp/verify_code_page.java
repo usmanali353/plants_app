@@ -107,10 +107,14 @@ public class verify_code_page extends AppCompatActivity {
     };
     private void verifyVerificationCode(String code) {
         //creating the credential
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
+        try {
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
 
-        //signing the user
-        signInWithPhoneAuthCredential(credential);
+            //signing the user
+            signInWithPhoneAuthCredential(credential);
+        }catch(Exception e){
+            Toast.makeText(verify_code_page.this,e.getMessage(),Toast.LENGTH_LONG).show();
+        }
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {

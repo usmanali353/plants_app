@@ -7,6 +7,14 @@ public class Forecast {
     private String weatherId;
     private String date;
 
+    public Forecast(String highTemp, String lowTemp, String weather, String weatherId, String date) {
+        this.highTemp = highTemp;
+        this.lowTemp = lowTemp;
+        this.weather = weather;
+        this.weatherId = weatherId;
+        this.date = date;
+    }
+
     public String getDate() {
         return date;
     }

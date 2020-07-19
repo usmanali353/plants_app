@@ -25,9 +25,9 @@ public class ForecastAdapter extends BaseAdapter {
         mLogs = logs;
     }
 
-    // returning 5, skip position 0 (0 = today), starting with position 1
+    // returning 6, skip position 0 (0 = today), starting with position 1
     public int getCount() {
-        return mLogs.size();
+        return 6;
     }
 
     @Override
@@ -64,10 +64,10 @@ public class ForecastAdapter extends BaseAdapter {
         weather1.setTypeface(robotoRegular);
         mIconText.setTypeface(weatherFont);
 
-        maxTemp.setText("MAX: " + mLogs.get(position).getHighTemp() + (char) 0x00B0);
-        lowTemp.setText("MIN: " + mLogs.get(position).getLowTemp() + (char) 0x00B0);
-        setWeatherIcon(Integer.valueOf(mLogs.get(position).getWeatherId()));
-        weather1.setText(mLogs.get(position).getWeather());
+        maxTemp.setText("MAX: " + mLogs.get(position+1).getHighTemp() + (char) 0x00B0);
+        lowTemp.setText("MIN: " + mLogs.get(position+1).getLowTemp() + (char) 0x00B0);
+        setWeatherIcon(Integer.valueOf(mLogs.get(position+1).getWeatherId()));
+        weather1.setText(mLogs.get(position+1).getWeather());
         dayOfWeek.setText(new SimpleDateFormat("EE", Locale.ENGLISH).format(date.getTime()));
         return view;
     }

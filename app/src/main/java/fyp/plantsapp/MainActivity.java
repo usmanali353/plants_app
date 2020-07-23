@@ -1,11 +1,13 @@
 package fyp.plantsapp;
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -19,7 +21,10 @@ import android.media.RingtoneManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -43,6 +48,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
@@ -57,9 +63,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+import fr.ganfra.materialspinner.MaterialSpinner;
 import fyp.plantsapp.Utilities.Forecast;
 import fyp.plantsapp.Utilities.ForecastAdapter;
 import fyp.plantsapp.Utilities.SetListViewHeight;
@@ -122,6 +131,8 @@ public class MainActivity extends AppCompatActivity implements Listener {
                     finish();
                 }else if(item.getItemId()==R.id.notification){
                     startActivity(new Intent(MainActivity.this,notifications_page.class));
+                }else if(item.getItemId()==R.id.profile){
+                    edit_profile();
                 }
                 return true;
             }
@@ -298,7 +309,19 @@ public class MainActivity extends AppCompatActivity implements Listener {
                     String formattedDate = df.format(c);
                     if(prefs.getString("current_date",null)==null||!prefs.getString("current_date",null).equals(formattedDate)) {
                         create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")), "Follow safety Precautions According to Temperature");
-
+                        if(userInfo.getCropCurrentStage().equals("Preparation of Land")){
+                             create_notification_for_procedures("Your Crop is on Preparation of Land Stage","Land Preparation Tips","F0VbCrUxLMk");
+                        }else if(userInfo.getCropCurrentStage().equals("Sowing of Seeds")){
+                            create_notification_for_procedures("Your Crop is on Sowing of Seed Stage","comparison between Drill and Broadcast Sowing Method in Wheat","gVqwCICv-1Q");
+                        }else if(userInfo.getCropCurrentStage().equals("Irrigation")){
+                            create_notification_for_procedures("Your Crop is Irrigation Stage","Tips on Irrigation","wJyLrxLCJ6U");
+                        }else if(userInfo.getCropCurrentStage().equals("Adding Fertilizers")){
+                            create_notification_for_procedures("Your Crop is Adding Fertilizers Stage","Tips on Using Fertilizers in Wheat Crop","bh1QzRf2wfQ");
+                        }else if(userInfo.getCropCurrentStage().equals("Removal of Weeds")){
+                            create_notification_for_procedures("Your Crop is on Removing Stage","Removing Weed Tips","JnxXX2cjqVo");
+                        }else if(userInfo.getCropCurrentStage().equals("Harvesting")){
+                            create_notification_for_procedures("Your Crop is on Harvesting Stage","Harvesting Info","CkKdOnaRQn0");
+                        }
                     }
                     setWeatherIcon(Integer.parseInt(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("id"))), mWeatherIcon);
                     for (int i = 1; i < sevenDayWeatherArray.length(); i++) {
@@ -318,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements Listener {
             Date c = Calendar.getInstance().getTime();
             SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
             String formattedDate = df.format(c);
-            FirebaseFirestore.getInstance().collection("notifications").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("user_notification").document().set(new Notifications(title,message,formattedDate)).addOnCompleteListener(new OnCompleteListener<Void>() {
+            FirebaseFirestore.getInstance().collection("notifications").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("user_notification").document().set(new Notifications(title,message,formattedDate,null)).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
@@ -358,6 +381,124 @@ public class MainActivity extends AppCompatActivity implements Listener {
             NotificationManagerCompat nmc = NotificationManagerCompat.from(MainActivity.this);
             nmc.notify(100001, nb.build());
         }
+        private void create_notification_for_procedures (String title, String message,String videoId) {
+            Date c = Calendar.getInstance().getTime();
+            SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+            String formattedDate = df.format(c);
+            FirebaseFirestore.getInstance().collection("notifications").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("user_notification").document().set(new Notifications(title,message,formattedDate,videoId)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();
+                }
+            });
+            prefs.edit().putString("current_date",formattedDate).apply();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel("procedure_notifications", "Procedure Notifications", NotificationManager.IMPORTANCE_HIGH);
+                channel.setDescription("inform about Pocedure and video on how to perform that Procedure");
+                channel.enableLights(true);
+                channel.setLightColor(Color.MAGENTA);
+                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                manager.createNotificationChannel(channel);
+            }
+            Intent notificationIntent = new Intent(MainActivity.this, procedure_details.class);
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            notificationIntent.putExtra("videoId",videoId);
+            PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, notificationIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            NotificationCompat.Builder nb = new NotificationCompat.Builder(getBaseContext(), "procedure_notifications");
+            nb.setContentIntent(pendingIntent);
+            nb.setContentTitle(title);
+            nb.setContentText(message);
+            nb.setPriority(NotificationCompat.PRIORITY_HIGH);
+            nb.setSmallIcon(R.drawable.logo);
+            nb.setSound(RingtoneManager.getActualDefaultRingtoneUri(getBaseContext(), RingtoneManager.TYPE_NOTIFICATION));
+            nb.setDefaults(NotificationCompat.FLAG_SHOW_LIGHTS | NotificationCompat.DEFAULT_VIBRATE);
+            nb.setLights(Color.BLUE, 5000, 5000);
+            nb.setWhen(System.currentTimeMillis());
+            nb.setTicker("New Procedure Based Info");
+            NotificationManagerCompat nmc = NotificationManagerCompat.from(MainActivity.this);
+            nmc.notify(100002, nb.build());
+        }
+
+    }
+    private void edit_profile(){
+        View v= LayoutInflater.from(MainActivity.this).inflate(R.layout.profile_page,null);
+        final TextInputEditText name=v.findViewById(R.id.name_txt);
+        final TextInputEditText email=v.findViewById(R.id.email_txt);
+        MaterialSpinner cropcurrentStage=v.findViewById(R.id.cropcurrentstage);
+        name.setText(userInfo.getName());
+        email.setText(userInfo.getEmail());
+        for (int i=0;i<getResources().getStringArray(R.array.crop_stages).length;i++){
+            if(getResources().getStringArray(R.array.crop_stages)[i].equals(userInfo.getCropCurrentStage())){
+                cropcurrentStage.setSelection(i+1);
+            }
+        }
+        //cropcurrentStage.setSelection();
+        android.app.AlertDialog profile_dialog=new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Profile")
+                .setMessage("Provide Valid Information")
+                .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).setView(v).create();
+        profile_dialog.show();
+        profile_dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(name.getText().toString().isEmpty()){
+                    name.setError("Enter Name");
+                }else if(email.getText().toString().isEmpty()){
+                    email.setError("Enter Email");
+                }else if(!isValidEmail(email.getText().toString())){
+                    email.setError("Invalid Email");
+                }else if(cropcurrentStage.getSelectedItem()==null){
+                    cropcurrentStage.setError("Select Crop Current Stage");
+                }else{
+                    Map<String,Object> map=new HashMap<>();
+                    map.put("name",name.getText().toString());
+                    map.put("email",email.getText().toString());
+                    map.put("cropCurrentStage",cropcurrentStage.getSelectedItem().toString());
+                    ProgressDialog pd=new ProgressDialog(MainActivity.this);
+                    pd.setMessage("Updating Profile...");
+                    pd.show();
+                    FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).update(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            pd.dismiss();
+                            if(task.isSuccessful()){
+                                prefs.edit().putString("user_info",new Gson().toJson(new user(name.getText().toString(),email.getText().toString(),FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(),cropcurrentStage.getSelectedItem().toString()))).apply();
+                                startActivity(new Intent(MainActivity.this,MainActivity.class));
+                                finish();
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            pd.dismiss();
+                            Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        });
+
+    }
+    public static boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
 
 }

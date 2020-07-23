@@ -40,6 +40,6 @@
         <item>Adding Fertilizers</item>
         <item>Removal of Weeds</item>
         <item>Harvesting</item>
-        <item></item>
     </string-array>
+    <string name="title_activity_procedure_details">Procedure Details</string>
 </resources>

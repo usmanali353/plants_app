@@ -4,6 +4,18 @@ public class Notifications {
    private String title;
     private String message;
 
+    public String getVideoId() {
+        return videoId;
+    }
+
+    public void setVideoId(String videoId) {
+        this.videoId = videoId;
+    }
+
+    private String videoId;
+
+
+
     public String getDate() {
         return date;
     }
@@ -34,9 +46,10 @@ public class Notifications {
         this.message = message;
     }
 
-    public Notifications(String title, String message,String date) {
+    public Notifications(String title, String message,String date,String videoId) {
         this.title = title;
         this.message = message;
         this.date=date;
+        this.videoId=videoId;
     }
 }

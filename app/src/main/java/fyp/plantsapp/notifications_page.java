@@ -46,7 +46,7 @@ public class notifications_page extends AppCompatActivity {
                     for (int i=0;i<queryDocumentSnapshots.getDocuments().size();i++){
                         notificationsArrayList.add(queryDocumentSnapshots.getDocuments().get(i).toObject(Notifications.class));
                     }
-                    notificationList.setAdapter(new notification_adapter(notificationsArrayList));
+                    notificationList.setAdapter(new notification_adapter(notificationsArrayList,notifications_page.this));
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {

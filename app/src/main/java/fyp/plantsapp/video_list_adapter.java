@@ -38,7 +38,7 @@ public class video_list_adapter extends RecyclerView.Adapter<video_list_adapter.
        holder.youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
            @Override
            public void onReady(@NotNull YouTubePlayer youTubePlayer) {
-                youTubePlayer.loadVideo(videos.get(position),0);
+                youTubePlayer.cueVideo(videos.get(position),0);
            }
        });
     }

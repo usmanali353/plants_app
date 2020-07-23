@@ -12,6 +12,11 @@
         android:icon="@drawable/ic_videocam_white_24dp"
        />
     <item
+        android:id="@+id/profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_person_white_24dp"
+        />
+    <item
         android:id="@+id/help"
         android:title="Help"
         android:icon="@drawable/ic_help_white_24dp"

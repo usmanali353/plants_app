@@ -15,9 +15,14 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true">
         <activity
+            android:name=".procedure_details"
+            android:label="@string/title_activity_procedure_details"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".notifications_page"
             android:label="@string/title_activity_notifications_page"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".wheat_farming_procedures"
             android:label="@string/title_activity_wheat_farming_procedures"

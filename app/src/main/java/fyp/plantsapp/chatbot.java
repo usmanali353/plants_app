@@ -30,12 +30,11 @@ public class chatbot extends AppCompatActivity {
         browser.getSettings().setJavaScriptEnabled(true);
         browser.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         browser.setWebViewClient(new MyWebViewClient());
-        browser.loadUrl("https://console.dialogflow.com/api-client/demo/embedded/1ab8276d-12d3-4c9c-8cc0-e176bab1c385");
+        browser.loadUrl(getIntent().getStringExtra("url"));
         browser.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onPermissionRequest(final PermissionRequest request) {
                 myRequest = request;
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     for (String permission : request.getResources()) {
                         switch (permission) {
@@ -90,7 +89,7 @@ public class chatbot extends AppCompatActivity {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         myRequest.grant(myRequest.getResources());
                     }
-                    browser.loadUrl("https://console.dialogflow.com/api-client/demo/embedded/1ab8276d-12d3-4c9c-8cc0-e176bab1c385");
+                    browser.loadUrl(getIntent().getStringExtra("url"));
 
                 } else {
 

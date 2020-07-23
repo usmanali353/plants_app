@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements Listener {
                 }else if(item.getItemId()==R.id.crop_videos){
                     startActivity(new Intent(MainActivity.this,crop_Videos.class));
                 }else if(item.getItemId()==R.id.help){
-                    startActivity(new Intent(MainActivity.this,chatbot.class));
+                    startActivity(new Intent(MainActivity.this,chatbot.class).putExtra("url","https://console.dialogflow.com/api-client/demo/embedded/1ab8276d-12d3-4c9c-8cc0-e176bab1c385"));
                 }else if(item.getItemId()==R.id.sign_out){
                     FirebaseAuth.getInstance().signOut();
                     prefs.edit().remove("user_info").apply();
@@ -133,22 +133,12 @@ public class MainActivity extends AppCompatActivity implements Listener {
                     startActivity(new Intent(MainActivity.this,notifications_page.class));
                 }else if(item.getItemId()==R.id.profile){
                     edit_profile();
+                }else if(item.getItemId()==R.id.insecticide){
+                    startActivity(new Intent(MainActivity.this,chatbot.class).putExtra("url",""));
                 }
                 return true;
             }
         });
-//        chatBot.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-//        cropVideo.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
         LocationRequest request = new LocationRequest();
         request.setInterval(10000);
         request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -274,8 +264,6 @@ public class MainActivity extends AppCompatActivity implements Listener {
         protected String doInBackground(String... strings) {
             try{
                 URL url=new URL("https://api.openweathermap.org/data/2.5/onecall?lat="+strings[0]+"&"+"lon="+strings[1]+"&"+"appid=d9162a43685ed20605c4736f1a7a01c1"+"&"+"exclude=hourly,minutely,current"+"&"+"units=metric");
-                Log.e("url",url.toString());
-
                 HttpURLConnection connection= (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setDoInput(true);connection.setDoOutput(true);
@@ -306,9 +294,18 @@ public class MainActivity extends AppCompatActivity implements Listener {
                     mWeather.setText(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")));
                     Date c = Calendar.getInstance().getTime();
                     SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+
                     String formattedDate = df.format(c);
                     if(prefs.getString("current_date",null)==null||!prefs.getString("current_date",null).equals(formattedDate)) {
-                        create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")), "Follow safety Precautions According to Temperature");
+                        if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&userInfo.getCropCurrentStage().equals("Harvesting")){
+                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "There are Chances of Rain not a better time for Harvesting");
+                        }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&userInfo.getCropCurrentStage().equals("Sowing Seeds")){
+                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "There are Chances of Rain ");
+                        }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&userInfo.getCropCurrentStage().equals("Irrigation")){
+                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "There are Chances of Rain rain will provide necessery moisture to Crops");
+                        }else {
+                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "Act According to Weather");
+                        }
                         if(userInfo.getCropCurrentStage().equals("Preparation of Land")){
                              create_notification_for_procedures("Your Crop is on Preparation of Land Stage","Land Preparation Tips","F0VbCrUxLMk");
                         }else if(userInfo.getCropCurrentStage().equals("Sowing of Seeds")){

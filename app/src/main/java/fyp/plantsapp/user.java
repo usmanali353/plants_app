@@ -1,23 +1,28 @@
 package fyp.plantsapp;
 
 public class user {
-
-        public user(String name, String cnic, String email, String address,String phone) {
+        public user(String name, String email,String phone,String cropCurrentStage) {
             this.name = name;
-            this.cnic = cnic;
             this.email = email;
-            this.address = address;
             this.phone=phone;
+            this.cropCurrentStage=cropCurrentStage;
         }
         public user(){
 
         }
         private String name;
-        private String cnic;
         private String email;
-        private String address;
+        private String cropCurrentStage;
 
-        public String getPhone() {
+    public String getCropCurrentStage() {
+        return cropCurrentStage;
+    }
+
+    public void setCropCurrentStage(String cropCurrentStage) {
+        this.cropCurrentStage = cropCurrentStage;
+    }
+
+    public String getPhone() {
             return phone;
         }
 
@@ -35,14 +40,6 @@ public class user {
             this.name = name;
         }
 
-        public String getCnic() {
-            return cnic;
-        }
-
-        public void setCnic(String cnic) {
-            this.cnic = cnic;
-        }
-
         public String getEmail() {
             return email;
         }
@@ -51,12 +48,5 @@ public class user {
             this.email = email;
         }
 
-        public String getAddress() {
-            return address;
-        }
-
-        public void setAddress(String address) {
-            this.address = address;
-        }
     }
 

@@ -15,15 +15,27 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true">
         <activity
+            android:name=".notifications_page"
+            android:label="@string/title_activity_notifications_page"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".wheat_farming_procedures"
+            android:label="@string/title_activity_wheat_farming_procedures"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".crop_Videos"
             android:label="@string/title_activity_crop__videos"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".chatbot"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MainActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Login"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,10 +43,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Login"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
         <activity
             android:name=".verify_code_page"
             android:screenOrientation="portrait"

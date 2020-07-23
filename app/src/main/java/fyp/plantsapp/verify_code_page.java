@@ -35,10 +35,13 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
 
+import fr.ganfra.materialspinner.MaterialSpinner;
 
 
 public class verify_code_page extends AppCompatActivity {
@@ -123,65 +126,81 @@ public class verify_code_page extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            AlertDialog profile_dialog=new AlertDialog.Builder(verify_code_page.this)
-                                    .setTitle("User Info")
-                                    .setMessage("Provide Valid Information")
-                                    .setPositiveButton("add", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-
-                                        }
-                                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    }).create();
-                            View v= LayoutInflater.from(verify_code_page.this).inflate(R.layout.profile_page,null);
-                            final TextInputEditText name=v.findViewById(R.id.name_txt);
-                            final TextInputEditText cnic=v.findViewById(R.id.cnic_txt);
-                            final TextInputEditText email=v.findViewById(R.id.email_txt);
-                            final TextInputEditText address=v.findViewById(R.id.address_txt);
-                            profile_dialog.setView(v);
-                            profile_dialog.show();
-                            profile_dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                            ProgressDialog pd=new ProgressDialog(verify_code_page.this);
+                            pd.setMessage("Checking if User Already Exists...");
+                            pd.show();
+                            FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
-                                public void onClick(View v) {
-                                    if(name.getText().toString().isEmpty()){
-                                        name.setError("Enter Name");
-                                    }else if(cnic.getText().toString().isEmpty()){
-                                        cnic.setError("Enter CNIC");
-                                    }else if(cnic.getText().toString().length()!=13){
-                                        cnic.setError("CNIC should be atleast 13 digits");
-                                    }else if(email.getText().toString().isEmpty()){
-                                        email.setError("Enter Email");
-                                    }else if(!isValidEmail(email.getText().toString())){
-                                        email.setError("Invalid Email");
-                                    }else if(address.getText().toString().isEmpty()){
-                                        address.setError("Enter Address");
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    pd.dismiss();
+                                    if(documentSnapshot.exists()){
+                                        Intent intent = new Intent(verify_code_page.this, MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
                                     }else{
-                                        user userinfo=new user(name.getText().toString(),cnic.getText().toString(),email.getText().toString(),address.getText().toString(),FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-                                        FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).set(userinfo).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        AlertDialog profile_dialog=new AlertDialog.Builder(verify_code_page.this)
+                                                .setTitle("User Info")
+                                                .setMessage("Provide Valid Information")
+                                                .setPositiveButton("add", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+
+                                                    }
+                                                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        dialog.dismiss();
+                                                    }
+                                                }).create();
+                                        View v= LayoutInflater.from(verify_code_page.this).inflate(R.layout.profile_page,null);
+                                        final TextInputEditText name=v.findViewById(R.id.name_txt);
+                                        final TextInputEditText email=v.findViewById(R.id.email_txt);
+                                        MaterialSpinner cropcurrentStage=v.findViewById(R.id.cropcurrentstage);
+
+                                        profile_dialog.setView(v);
+                                        profile_dialog.show();
+                                        profile_dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                                             @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if(task.isSuccessful()){
-                                                    prefs.edit().putString("mobile",FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber()).apply();
-                                                    Intent intent = new Intent(verify_code_page.this, MainActivity.class);
-                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                    startActivity(intent);
+                                            public void onClick(View v) {
+                                                if(name.getText().toString().isEmpty()){
+                                                    name.setError("Enter Name");
+                                                }else if(email.getText().toString().isEmpty()){
+                                                    email.setError("Enter Email");
+                                                }else if(!isValidEmail(email.getText().toString())){
+                                                    email.setError("Invalid Email");
+                                                }else if(cropcurrentStage.getSelectedItem()==null){
+                                                    cropcurrentStage.setError("Select Crop Current Stage");
+                                                }else{
+                                                    user userinfo=new user(name.getText().toString(),email.getText().toString(),FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(),cropcurrentStage.getSelectedItem().toString());
+                                                    FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).set(userinfo).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if(task.isSuccessful()){
+                                                                prefs.edit().putString("user_info",new Gson().toJson(new user(name.getText().toString(),email.getText().toString(),FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(),cropcurrentStage.getSelectedItem().toString()))).apply();
+                                                                Intent intent = new Intent(verify_code_page.this, MainActivity.class);
+                                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                                startActivity(intent);
+                                                            }
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Toast.makeText(verify_code_page.this,e.getMessage(),Toast.LENGTH_LONG).show();
+                                                        }
+                                                    });
                                                 }
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(verify_code_page.this,e.getMessage(),Toast.LENGTH_LONG).show();
                                             }
                                         });
                                     }
                                 }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    pd.dismiss();
+                                    Toast.makeText(verify_code_page.this,e.getMessage(),Toast.LENGTH_LONG).show();
+                                }
                             });
                         } else {
-
                             //verification unsuccessful.. display an error message
 
                             String message = "Somthing is wrong, we will fix it soon...";

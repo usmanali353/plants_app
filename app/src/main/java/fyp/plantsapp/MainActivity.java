@@ -1,5 +1,8 @@
 package fyp.plantsapp;
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,10 +10,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.media.RingtoneManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +29,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -32,16 +39,26 @@ import androidx.preference.PreferenceManager;
 import com.example.easywaylocation.EasyWayLocation;
 import com.example.easywaylocation.Listener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import fyp.plantsapp.Utilities.Forecast;
 import fyp.plantsapp.Utilities.ForecastAdapter;
@@ -57,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements Listener {
     ActionBarDrawerToggle actionBarDrawerToggle;
     DrawerLayout drawerLayout;
     NavigationView nv;
+    user userInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements Listener {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Weather");
+        userInfo=new Gson().fromJson(prefs.getString("user_info",null),user.class);
         mListViewForecast =  findViewById(R.id.listView);
         mTemp = findViewById(R.id.temp);
         nv=findViewById(R.id.nav_view);
@@ -91,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements Listener {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if(item.getItemId()==R.id.farming_procedures){
-
+                    startActivity(new Intent(MainActivity.this,wheat_farming_procedures.class));
                 }else if(item.getItemId()==R.id.crop_videos){
                     startActivity(new Intent(MainActivity.this,crop_Videos.class));
                 }else if(item.getItemId()==R.id.help){
@@ -101,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements Listener {
                     prefs.edit().remove("user_info").apply();
                     startActivity(new Intent(MainActivity.this,Login.class));
                     finish();
+                }else if(item.getItemId()==R.id.notification){
+                    startActivity(new Intent(MainActivity.this,notifications_page.class));
                 }
                 return true;
             }
@@ -223,6 +244,7 @@ public class MainActivity extends AppCompatActivity implements Listener {
     ProgressDialog pd;
      StringBuilder json;
      ArrayList<Forecast> forecasts;
+     boolean showNotification;
         public fetch_weather() {
             this.pd = new ProgressDialog(MainActivity.this);
             this.pd.setMessage("Fetching Weather");
@@ -251,8 +273,6 @@ public class MainActivity extends AppCompatActivity implements Listener {
                 while((line=reader.readLine())!=null){
                     json.append(line);
                 }
-                Log.e("connection_status",String.valueOf(connection.getResponseCode()));
-                Log.e("fetched",json.toString());
              return json.toString();
             }catch(Exception e){
                 e.printStackTrace();
@@ -264,28 +284,80 @@ public class MainActivity extends AppCompatActivity implements Listener {
         protected void onPostExecute(String s) {
             pd.dismiss();
             easyWayLocation.endUpdates();
-            if(s!=null){
-                Log.e("fetched_weather",s);
+            if (s != null) {
                 try {
-                    JSONObject weatherObj=new JSONObject(s);
-                    JSONArray sevenDayWeatherArray=weatherObj.getJSONArray("daily");
+                    JSONObject weatherObj = new JSONObject(s);
+                    JSONArray sevenDayWeatherArray = weatherObj.getJSONArray("daily");
                     mHumidity.setText(String.valueOf(sevenDayWeatherArray.getJSONObject(0).get("humidity")));
                     mTemp.setText(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0);
-                    mTempLow.setText("MIN: "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("min")) + (char) 0x00B0);
-                    mTempHigh.setText("MAX: "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("max")) + (char) 0x00B0);
+                    mTempLow.setText("MIN: " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("min")) + (char) 0x00B0);
+                    mTempHigh.setText("MAX: " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("max")) + (char) 0x00B0);
                     mWeather.setText(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")));
-                    setWeatherIcon(Integer.parseInt(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("id"))),mWeatherIcon);
-                    for(int i=1;i<sevenDayWeatherArray.length();i++){
-                       forecasts.add(new Forecast(String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONObject("temp").get("max")),String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONObject("temp").get("min")),String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONArray("weather").getJSONObject(0).get("description")),String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONArray("weather").getJSONObject(0).get("id")),String.valueOf(sevenDayWeatherArray.getJSONObject(i).get("dt"))));
+                    Date c = Calendar.getInstance().getTime();
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+                    String formattedDate = df.format(c);
+                    if(prefs.getString("current_date",null)==null||!prefs.getString("current_date",null).equals(formattedDate)) {
+                        create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")), "Follow safety Precautions According to Temperature");
+
                     }
-                    mListViewForecast.setAdapter(new ForecastAdapter(MainActivity.this,forecasts));
-                   // SetListViewHeight.setListViewHeight(mListViewForecast);
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
+                    setWeatherIcon(Integer.parseInt(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("id"))), mWeatherIcon);
+                    for (int i = 1; i < sevenDayWeatherArray.length(); i++) {
+                        forecasts.add(new Forecast(String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONObject("temp").get("max")), String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONObject("temp").get("min")), String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONArray("weather").getJSONObject(0).get("description")), String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONArray("weather").getJSONObject(0).get("id")), String.valueOf(sevenDayWeatherArray.getJSONObject(i).get("dt"))));
+                    }
+                    mListViewForecast.setAdapter(new ForecastAdapter(MainActivity.this, forecasts));
+
+                // SetListViewHeight.setListViewHeight(mListViewForecast);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
 
             }
             super.onPostExecute(s);
         }
+        private void create_notification (String title, String message){
+            Date c = Calendar.getInstance().getTime();
+            SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+            String formattedDate = df.format(c);
+            FirebaseFirestore.getInstance().collection("notifications").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("user_notification").document().set(new Notifications(title,message,formattedDate)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();
+                }
+            });
+            prefs.edit().putString("current_date",formattedDate).apply();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel("weather_notifications", "Weather Notifications", NotificationManager.IMPORTANCE_HIGH);
+                channel.setDescription("inform about current weather and safety precautions");
+                channel.enableLights(true);
+                channel.setLightColor(Color.MAGENTA);
+                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                manager.createNotificationChannel(channel);
+            }
+            Intent notificationIntent = new Intent(MainActivity.this, MainActivity.class);
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, notificationIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            NotificationCompat.Builder nb = new NotificationCompat.Builder(getBaseContext(), "weather_notifications");
+            nb.setContentIntent(pendingIntent);
+            nb.setContentTitle(title);
+            nb.setContentText(message);
+            nb.setPriority(NotificationCompat.PRIORITY_HIGH);
+            nb.setSmallIcon(R.drawable.logo);
+            nb.setSound(RingtoneManager.getActualDefaultRingtoneUri(getBaseContext(), RingtoneManager.TYPE_NOTIFICATION));
+            nb.setDefaults(NotificationCompat.FLAG_SHOW_LIGHTS | NotificationCompat.DEFAULT_VIBRATE);
+            nb.setLights(Color.BLUE, 5000, 5000);
+            nb.setWhen(System.currentTimeMillis());
+            nb.setTicker("New Weather Based Suggestion");
+            NotificationManagerCompat nmc = NotificationManagerCompat.from(MainActivity.this);
+            nmc.notify(100001, nb.build());
+        }
     }
+
 }

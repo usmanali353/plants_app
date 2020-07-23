@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -22,21 +22,6 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cnic_textinputlayout"
-        android:hint="CNIC"
-        android:layout_margin="10dp"
-        >
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/cnic_txt"
-            android:inputType="number"
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/email_textinputlayout"
         android:hint="Email"
         android:layout_margin="10dp"
@@ -49,35 +34,17 @@
             />
 
     </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
+    <fr.ganfra.materialspinner.MaterialSpinner
+        android:id="@+id/cropcurrentstage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/address_textinputlayout"
-        android:hint="Address"
+        android:entries="@array/crop_stages"
+        app:ms_multiline="true"
         android:layout_margin="10dp"
-        >
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/address_txt"
-            android:inputType="textPostalAddress"
-            />
+        app:ms_hint="Crop Current Stage"
+        app:ms_enableFloatingLabel="true"
+        app:ms_enableErrorLabel="true"
+        app:ms_floatingLabelText="Crop Current Stage"
+      />
 
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/phone_textinputlayout"
-        android:hint="Phone"
-        android:visibility="gone"
-        android:layout_margin="10dp"
-        >
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/phone_txt"
-            android:inputType="phone"
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

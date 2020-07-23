@@ -31,7 +31,7 @@ public class Login extends Activity {
             proceed=findViewById(R.id.proceed);
             user= FirebaseAuth.getInstance().getCurrentUser();
             prefs= PreferenceManager.getDefaultSharedPreferences(this);
-            if(FirebaseAuth.getInstance().getCurrentUser()!=null){
+            if(prefs.getString("user_info",null)!=null){
                 startActivity(new Intent(Login.this,MainActivity.class));
                 finish();
             }

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -13,6 +14,7 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
 
 
 public class Login extends Activity {
@@ -32,8 +34,11 @@ public class Login extends Activity {
             user= FirebaseAuth.getInstance().getCurrentUser();
             prefs= PreferenceManager.getDefaultSharedPreferences(this);
             if(prefs.getString("user_info",null)!=null){
-                startActivity(new Intent(Login.this,MainActivity.class));
-                finish();
+                fyp.plantsapp.user u=new Gson().fromJson(prefs.getString("user_info",null), fyp.plantsapp.user.class);
+                if(u!=null){
+                    startActivity(new Intent(Login.this,MainActivity.class));
+                    finish();
+                }
             }
             phone_txt.addTextChangedListener(new TextWatcher() {
                 @Override

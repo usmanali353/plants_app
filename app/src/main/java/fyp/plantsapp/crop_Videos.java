@@ -17,6 +17,8 @@ public class crop_Videos extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(1);
+        getWindow().setFlags(1024,1024);
         setContentView(R.layout.activity_crop_videos);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

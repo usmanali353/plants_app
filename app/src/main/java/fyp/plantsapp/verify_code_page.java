@@ -134,6 +134,7 @@ public class verify_code_page extends AppCompatActivity {
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                                     pd.dismiss();
                                     if(documentSnapshot.exists()){
+                                        prefs.edit().putString("user_info",new Gson().toJson(documentSnapshot.toObject(fyp.plantsapp.user.class))).apply();
                                         Intent intent = new Intent(verify_code_page.this, MainActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);

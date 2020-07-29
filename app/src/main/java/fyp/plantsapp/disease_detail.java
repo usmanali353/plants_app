@@ -31,20 +31,56 @@ public class disease_detail extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(1);
+        getWindow().setFlags(1024,1024);
         setContentView(R.layout.activity_disease_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ctbl=findViewById(R.id.collapse_toolbar);
+        ctbl.setTitle("Symptoms");
         diseases=new Gson().fromJson(getIntent().getStringExtra("disease_data"),Diseases.class);
         collaspingtoolbarimage=findViewById(R.id.bgheader);
         if(diseases!=null){
             collaspingtoolbarimage.setImageResource(diseases.getImage());
         }
-
         vp=(ViewPager) findViewById(R.id.view);
         tb=(TabLayout) findViewById(R.id.tabs);
         setviewpager();
         tb.setupWithViewPager(vp);
+        tb.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tab.getPosition()==0){
+                    ctbl.setTitle("Symptoms");
+                }else if(tab.getPosition()==1){
+                    ctbl.setTitle("Precautionary Measures");
+                }else{
+                    ctbl.setTitle("Treatment");
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                if(tab.getPosition()==0){
+                    ctbl.setTitle("Symptoms");
+                }else if(tab.getPosition()==1){
+                    ctbl.setTitle("Precautionary Measures");
+                }else{
+                    ctbl.setTitle("Treatment");
+                }
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                if(tab.getPosition()==0){
+                    ctbl.setTitle("Symptoms");
+                }else if(tab.getPosition()==1){
+                    ctbl.setTitle("Precautionary Measures");
+                }else{
+                    ctbl.setTitle("Treatment");
+                }
+            }
+        });
     }
     public void setviewpager(){
 
@@ -54,7 +90,7 @@ public class disease_detail extends AppCompatActivity {
 
         vpa.addfragment(new preventive_mesaures_fragment(),"Preventive Measures");
 
-        vpa.addfragment(new sprays_fragment(),"Sprays");
+        vpa.addfragment(new sprays_fragment(),"Treatment");
 
         vp.setAdapter(vpa);
 

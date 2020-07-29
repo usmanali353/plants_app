@@ -45,11 +45,11 @@ ArrayList<Diseases> diseases;
         sprays1.add("Tebuconazole 50.0%,WG,Trifloxystrobin 25.0% WG");
         diseases.add(new Diseases("Yellow Stripe Rust","Fungus",sprays1,symptoms1,preventive_measures1,R.drawable.yellow_rust));
         List<String> preventive_measures2=new ArrayList<>();
-        preventive_measures1.add("Choose resistant variables if available");
-        preventive_measures1.add("Do not sow too early in the season");
-        preventive_measures1.add("Modify sowing density to allow for good aeration of cultures and reduce humidity");
-        preventive_measures1.add("Mornitor field regularly for first signs of disease");
-        preventive_measures1.add("plan crop rotation with non host plants");
+        preventive_measures2.add("Choose resistant variables if available");
+        preventive_measures2.add("Do not sow too early in the season");
+        preventive_measures2.add("Modify sowing density to allow for good aeration of cultures and reduce humidity");
+        preventive_measures2.add("Mornitor field regularly for first signs of disease");
+        preventive_measures2.add("plan crop rotation with non host plants");
         List<String> symptoms2=new ArrayList<>();
         symptoms2.add("White fluffy patches on the leaves");
         symptoms2.add("in some crops patches can appear as large raised postules instead");
@@ -61,6 +61,6 @@ ArrayList<Diseases> diseases;
         sprays2.add("Azoxystrobin 18.2%,Cyproconazole 7.3% SC");
         sprays2.add("Azoxystrobin 18.2%,Difenoconazole 11.4% SC");
         sprays2.add("Tebuconazole 50.0%,WG,Trifloxystrobin 25.0% WG");
-        diseases.add(new Diseases("Powdery Mildew","Fungus",sprays2,symptoms2,preventive_measures2,R.drawable.wire_worms));
+        diseases.add(new Diseases("Powdery Mildew","Fungus",sprays2,symptoms2,preventive_measures2,R.drawable.powdery_mildrew));
     }
 }

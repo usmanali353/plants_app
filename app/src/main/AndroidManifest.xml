@@ -15,10 +15,14 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true">
         <activity
+            android:name=".diseases_list"
+            android:label="@string/title_activity_diseases_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".procedure_details"
             android:label="@string/title_activity_procedure_details"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".notifications_page"
             android:label="@string/title_activity_notifications_page"
@@ -50,6 +54,10 @@
         </activity>
         <activity
             android:name=".verify_code_page"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".disease_detail"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
     </application>

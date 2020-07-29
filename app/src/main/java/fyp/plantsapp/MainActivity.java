@@ -134,7 +134,8 @@ public class MainActivity extends AppCompatActivity implements Listener {
                 }else if(item.getItemId()==R.id.profile){
                     edit_profile();
                 }else if(item.getItemId()==R.id.insecticide){
-                    startActivity(new Intent(MainActivity.this,chatbot.class).putExtra("url",""));
+                   // startActivity(new Intent(MainActivity.this,chatbot.class).putExtra("url",""));
+                    startActivity(new Intent(MainActivity.this,diseases_list.class));
                 }
                 return true;
             }

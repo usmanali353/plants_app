@@ -61,6 +61,22 @@ ArrayList<Diseases> diseases;
         sprays2.add("Azoxystrobin 18.2%,Cyproconazole 7.3% SC");
         sprays2.add("Azoxystrobin 18.2%,Difenoconazole 11.4% SC");
         sprays2.add("Tebuconazole 50.0%,WG,Trifloxystrobin 25.0% WG");
-        diseases.add(new Diseases("Powdery Mildew","Fungus",sprays2,symptoms2,preventive_measures2,R.drawable.powdery_mildrew));
+        diseases.add(new Diseases("Powdery Mildew","Insect",sprays2,symptoms2,preventive_measures2,R.drawable.powdery_mildrew));
+        List<String> preventive_measures3=new ArrayList<>();
+        preventive_measures3.add("Maintain a high number of different varieties of plants around fields.");
+        preventive_measures3.add("Use reflective mulches to repel invading populations of aphids.");
+        preventive_measures3.add("Monitor fields regularly to assess the incidence of a disease or pest and determine their severity.");
+        preventive_measures3.add("Remove infected plant parts.");
+        preventive_measures3.add("Check weeds in and around the fields.");
+        preventive_measures3.add("Do not over-water or over-fertilize.");
+        preventive_measures3.add("Control ant populations that protect aphids with sticky bands.");
+        List<String> symptoms3=new ArrayList<>();
+        symptoms3.add("Curled and deformed leaves. ");
+        symptoms3.add("Small insects under the leaves and shoots.");
+        symptoms3.add("Stunted growth.");
+        List<String> sprays3=new ArrayList<>();
+        sprays3.add("In case of mild infestation, use an insecticidal soap solution or solution based on plant oils, e.g. neem oil (3 ml/l). Aphids are also very susceptible to fungal diseases when it is humid. A spray of water on affected plants can also remove them.");
+        sprays3.add("Always consider an integrated approach with preventive measures together with biological treatments if available. Be aware that the use of chemical pesticides can cause aphids to become resistant to those that are used. Stem application with flonicamid and water (1:20) ratio at 30, 45, 60 days after sowing (DAS) can be planned. Fipronil 2ml or thiamethoxam (0.2g) or flonicamid (0.3g) or acetamiprid (0.2 per liter of water) can also be used. However, these chemicals can have negative impacts on predators, parasitoids, and pollinators.");
+        diseases.add(new Diseases("Aphids","Insect",sprays3,symptoms3,preventive_measures3,R.drawable.aphid));
     }
 }

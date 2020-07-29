@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    android:layout_height="match_parent">
+   <ImageView
+       android:layout_width="150dp"
+       android:layout_height="150dp"
+       android:src="@drawable/logo"
+       android:id="@+id/logo"
+       android:layout_centerInParent="true"
+       />
+   <com.tomer.fadingtextview.FadingTextView
+       android:id="@+id/fadingTextView"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_below="@+id/logo"
+       android:layout_centerHorizontal="true"
+       android:layout_marginTop="16dp"
+       android:textColor="@android:color/black"
+       android:textSize="30dp"
+       app:texts="@array/fading"
+       app:timeout="1000">
+
+   </com.tomer.fadingtextview.FadingTextView>
+</RelativeLayout>

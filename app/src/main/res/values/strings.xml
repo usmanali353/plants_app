@@ -39,6 +39,11 @@
         <item>Removal of Weeds</item>
         <item>Harvesting</item>
     </string-array>
+    <string-array name="fading">
+        <item>Farm</item>
+        <item>To</item>
+        <item>Harvest</item>
+    </string-array>
     <string name="title_activity_procedure_details">Procedure Details</string>
     <string name="title_activity_diseases_list">Diseases</string>
 </resources>

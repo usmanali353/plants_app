@@ -1,4 +1,4 @@
-package fyp.plantsapp;
+package fyp.plantsapp.Model;
 
 import java.util.List;
 

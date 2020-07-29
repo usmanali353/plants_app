@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -34,7 +33,7 @@ public class Login extends Activity {
             user= FirebaseAuth.getInstance().getCurrentUser();
             prefs= PreferenceManager.getDefaultSharedPreferences(this);
             if(prefs.getString("user_info",null)!=null){
-                fyp.plantsapp.user u=new Gson().fromJson(prefs.getString("user_info",null), fyp.plantsapp.user.class);
+                fyp.plantsapp.Model.user u=new Gson().fromJson(prefs.getString("user_info",null), fyp.plantsapp.Model.user.class);
                 if(u!=null){
                     startActivity(new Intent(Login.this,MainActivity.class));
                     finish();

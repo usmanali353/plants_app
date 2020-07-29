@@ -5,11 +5,8 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -22,7 +19,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -38,7 +34,6 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
 import com.example.easywaylocation.EasyWayLocation;
@@ -69,9 +64,10 @@ import java.util.Locale;
 import java.util.Map;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
+import fyp.plantsapp.Model.Notifications;
+import fyp.plantsapp.Model.user;
 import fyp.plantsapp.Utilities.Forecast;
 import fyp.plantsapp.Utilities.ForecastAdapter;
-import fyp.plantsapp.Utilities.SetListViewHeight;
 
 
 public class MainActivity extends AppCompatActivity implements Listener {

@@ -5,10 +5,7 @@ import android.os.Bundle;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -18,10 +15,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import fyp.plantsapp.Adapters.notification_adapter;
+import fyp.plantsapp.Model.Notifications;
 
 public class notifications_page extends AppCompatActivity {
   RecyclerView notificationList;

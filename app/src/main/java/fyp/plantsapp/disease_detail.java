@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import fyp.plantsapp.Fragments.preventive_mesaures_fragment;
 import fyp.plantsapp.Fragments.sprays_fragment;
 import fyp.plantsapp.Fragments.symptoms_fragment;
+import fyp.plantsapp.Model.Diseases;
 
 public class disease_detail extends AppCompatActivity {
     ViewPager vp;

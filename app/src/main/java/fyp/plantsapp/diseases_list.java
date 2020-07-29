@@ -2,18 +2,16 @@ package fyp.plantsapp;
 
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.View;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import fyp.plantsapp.Adapters.disease_list_adapter;
+import fyp.plantsapp.Model.Diseases;
 
 public class diseases_list extends AppCompatActivity {
 RecyclerView diseases_list;
@@ -63,6 +61,6 @@ ArrayList<Diseases> diseases;
         sprays2.add("Azoxystrobin 18.2%,Cyproconazole 7.3% SC");
         sprays2.add("Azoxystrobin 18.2%,Difenoconazole 11.4% SC");
         sprays2.add("Tebuconazole 50.0%,WG,Trifloxystrobin 25.0% WG");
-        diseases.add(new Diseases("Powdery Mildew","Fungus",sprays2,symptoms2,preventive_measures2,R.drawable.powdery_mildrew));
+        diseases.add(new Diseases("Powdery Mildew","Fungus",sprays2,symptoms2,preventive_measures2,R.drawable.wire_worms));
     }
 }

@@ -2,20 +2,15 @@ package fyp.plantsapp;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,6 +37,7 @@ import com.google.gson.Gson;
 import java.util.concurrent.TimeUnit;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
+import fyp.plantsapp.Model.user;
 
 
 public class verify_code_page extends AppCompatActivity {
@@ -134,7 +130,7 @@ public class verify_code_page extends AppCompatActivity {
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                                     pd.dismiss();
                                     if(documentSnapshot.exists()){
-                                        prefs.edit().putString("user_info",new Gson().toJson(documentSnapshot.toObject(fyp.plantsapp.user.class))).apply();
+                                        prefs.edit().putString("user_info",new Gson().toJson(documentSnapshot.toObject(fyp.plantsapp.Model.user.class))).apply();
                                         Intent intent = new Intent(verify_code_page.this, MainActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);

@@ -2,15 +2,12 @@ package fyp.plantsapp;
 
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.View;
+import fyp.plantsapp.Adapters.procedures_list_adapter;
 
 public class wheat_farming_procedures extends AppCompatActivity {
   RecyclerView proceduresList;

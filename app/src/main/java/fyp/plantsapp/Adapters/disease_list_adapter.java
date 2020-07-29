@@ -1,4 +1,4 @@
-package fyp.plantsapp;
+package fyp.plantsapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+
+import fyp.plantsapp.Model.Diseases;
+import fyp.plantsapp.R;
+import fyp.plantsapp.disease_detail;
 
 public class disease_list_adapter extends RecyclerView.Adapter<disease_list_adapter.disease_list_viewholder> {
    Context context;
@@ -39,7 +43,7 @@ public class disease_list_adapter extends RecyclerView.Adapter<disease_list_adap
        holder.disease_card.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
-               context.startActivity(new Intent(context,disease_detail.class).putExtra("disease_data",new Gson().toJson(diseases.get(position))));
+               context.startActivity(new Intent(context, disease_detail.class).putExtra("disease_data",new Gson().toJson(diseases.get(position))));
            }
        });
     }

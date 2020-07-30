@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Address;
@@ -62,8 +63,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
+import fyp.plantsapp.Model.Diseases;
 import fyp.plantsapp.Model.Notifications;
 import fyp.plantsapp.Model.user;
 import fyp.plantsapp.Utilities.Forecast;
@@ -291,9 +295,9 @@ public class MainActivity extends AppCompatActivity implements Listener {
                     mWeather.setText(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")));
                     Date c = Calendar.getInstance().getTime();
                     SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
-
                     String formattedDate = df.format(c);
                     if(prefs.getString("current_date",null)==null||!prefs.getString("current_date",null).equals(formattedDate)) {
+                        populate_diseases_list();
                         if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&userInfo.getCropCurrentStage().equals("Harvesting")){
                             create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "There are Chances of Rain not a better time for Harvesting");
                         }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&userInfo.getCropCurrentStage().equals("Sowing Seeds")){
@@ -335,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements Listener {
             Date c = Calendar.getInstance().getTime();
             SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
             String formattedDate = df.format(c);
-            FirebaseFirestore.getInstance().collection("notifications").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("user_notification").document().set(new Notifications(title,message,formattedDate,null)).addOnCompleteListener(new OnCompleteListener<Void>() {
+            FirebaseFirestore.getInstance().collection("notifications").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("user_notification").document().set(new Notifications(title,message,formattedDate,null,null)).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
@@ -379,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements Listener {
             Date c = Calendar.getInstance().getTime();
             SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
             String formattedDate = df.format(c);
-            FirebaseFirestore.getInstance().collection("notifications").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("user_notification").document().set(new Notifications(title,message,formattedDate,videoId)).addOnCompleteListener(new OnCompleteListener<Void>() {
+            FirebaseFirestore.getInstance().collection("notifications").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("user_notification").document().set(new Notifications(title,message,formattedDate,videoId,null)).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
@@ -494,5 +498,100 @@ public class MainActivity extends AppCompatActivity implements Listener {
     public static boolean isValidEmail(CharSequence target) {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
+    private void populate_diseases_list(){
+        ArrayList<Diseases> diseases=new ArrayList<>();
+        List<String> preventive_measures1=new ArrayList<>();
+        preventive_measures1.add("Cultivate disease resistant variables if available");
+        preventive_measures1.add("Ensure adequate nitrogen fertilization,Avoid excess nitrogen use.");
+        preventive_measures1.add("Screen fields regularly for volunteer plants and remove then");
+        preventive_measures1.add("Plow and dig crop residues deep in the soil after harvest");
+        List<String> symptoms1=new ArrayList<>();
+        symptoms1.add("Tiny Rusty postules arranged in stripes");
+        symptoms1.add("stems and head can also be affected");
+        List<String> sprays1=new ArrayList<>();
+        sprays1.add("bacillus pumilus");
+        sprays1.add("Azoxystrobin 18.2%,Cyproconazole 7.3% SC");
+        sprays1.add("Azoxystrobin 18.2%,Difenoconazole 11.4% SC");
+        sprays1.add("Tebuconazole 50.0%,WG,Trifloxystrobin 25.0% WG");
+        diseases.add(new Diseases("Yellow Stripe Rust","Fungus",sprays1,symptoms1,preventive_measures1,R.drawable.yellow_rust,"The symptoms are caused by the fungus Puccinia striiformis, an obligate parasite that requires living plant material to survive. Spores are dispersed up to hundreds of kilometers by wind currents and can initiate seasonal epidemics of the disease. The fungus enters the plant via the stomata and gradually colonizes the leaf tissues. The disease mainly occurs early in the growing season. Favorable conditions for the development of the fungus and the infection are high altitude, high humidity (dews), rainfall and cool temperatures between 7 and 15°C. Infection tends to cease when temperatures consistently exceed 21-23°C because at these temperatures the life cycle of the fungus is interrupted. Alternative hosts are wheat, barley, and rye."));
+        List<String> preventive_measures2=new ArrayList<>();
+        preventive_measures2.add("Choose resistant variables if available");
+        preventive_measures2.add("Do not sow too early in the season");
+        preventive_measures2.add("Modify sowing density to allow for good aeration of cultures and reduce humidity");
+        preventive_measures2.add("Mornitor field regularly for first signs of disease");
+        preventive_measures2.add("plan crop rotation with non host plants");
+        List<String> symptoms2=new ArrayList<>();
+        symptoms2.add("White fluffy patches on the leaves");
+        symptoms2.add("in some crops patches can appear as large raised postules instead");
+        symptoms2.add("Powdery Zones turns gray as disease progresses");
+        symptoms2.add("Conspicious black specks may appear late in the season");
+        symptoms2.add("Densly sowed plants and excessive nitrogen application are main causes");
+        List<String> sprays2=new ArrayList<>();
+        sprays2.add("Milk Solutions");
+        sprays2.add("Azoxystrobin 18.2%,Cyproconazole 7.3% SC");
+        sprays2.add("Azoxystrobin 18.2%,Difenoconazole 11.4% SC");
+        sprays2.add("Tebuconazole 50.0%,WG,Trifloxystrobin 25.0% WG");
+        diseases.add(new Diseases("Powdery Mildew","Fungus",sprays2,symptoms2,preventive_measures2,R.drawable.powdery_mildrew,"The symptoms are caused by the fungus Blumeria graminis, an obligate biotroph that can only grow and reproduce on a living host. If no hosts are available, it overwinters between seasons as dormant structures on plant debris in the field. Apart from the cereals, it can colonize dozens of other plants, that it may use to bridge two seasons. When conditions are favorable, it resumes growth and produces spores that are later scattered by wind to healthy plants. Once it lands on a leaf, the spore germinates and produce feeding structures that takes up nutrients from the host cells to support the growth of the fungus. Relatively cool and humid conditions (95% humidity) and cloudy weather favor its development. However, leaf moisture is not needed for the germination of the spores and can actually inhibit it. Ideal temperatures are between 16 °C and 21 °C with temperatures above 25 °C being detrimental. No known quarantine regulations exist for this pathogen because of its widespread distribution and airborne dissemination."));
+        List<String> preventive_measures3=new ArrayList<>();
+        preventive_measures3.add("Maintain a high number of different varieties of plants around fields.");
+        preventive_measures3.add("Use reflective mulches to repel invading populations of aphids.");
+        preventive_measures3.add("Monitor fields regularly to assess the incidence of a disease or pest and determine their severity.");
+        preventive_measures3.add("Remove infected plant parts.");
+        preventive_measures3.add("Check weeds in and around the fields.");
+        preventive_measures3.add("Do not over-water or over-fertilize.");
+        preventive_measures3.add("Control ant populations that protect aphids with sticky bands.");
+        List<String> symptoms3=new ArrayList<>();
+        symptoms3.add("Curled and deformed leaves. ");
+        symptoms3.add("Small insects under the leaves and shoots.");
+        symptoms3.add("Stunted growth.");
+        List<String> sprays3=new ArrayList<>();
+        sprays3.add("In case of mild infestation, use an insecticidal soap solution or solution based on plant oils, e.g. neem oil (3 ml/l). Aphids are also very susceptible to fungal diseases when it is humid. A spray of water on affected plants can also remove them.");
+        sprays3.add("Always consider an integrated approach with preventive measures together with biological treatments if available. Be aware that the use of chemical pesticides can cause aphids to become resistant to those that are used. Stem application with flonicamid and water (1:20) ratio at 30, 45, 60 days after sowing (DAS) can be planned. Fipronil 2ml or thiamethoxam (0.2g) or flonicamid (0.3g) or acetamiprid (0.2 per liter of water) can also be used. However, these chemicals can have negative impacts on predators, parasitoids, and pollinators.");
+        diseases.add(new Diseases("Aphids","Insect",sprays3,symptoms3,preventive_measures3,R.drawable.aphid,"Aphids are small, soft-bodied insects with long legs and antennae. Their size ranges from 0.5 to 2mm and the color of their body can be yellow, brown, red or black, depending on the species. Their aspect ranges from the wingless varieties, that are generally predominant, to the winged, waxy or woolly types. They usually settle and feed in clusters on the underside of well-fed young leaves and shoot tips. They use their long mouthparts to pierce tender plant tissues and suck out fluids. Low to moderate numbers are not damaging to the crops.  After an initial invasion in late spring or early summer, the aphid population usually diminishes naturally due to natural enemies. Several species carry plant viruses that can lead to the development of other diseases."));
+        int id= new Random().nextInt(diseases.size());
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        String formattedDate = df.format(c);
+        FirebaseFirestore.getInstance().collection("notifications").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("user_notification").document().set(new Notifications("Your Crop may get "+diseases.get(id).getName()+" that is the "+diseases.get(id).getType(),diseases.get(id).getTrigger(),formattedDate,null,diseases.get(id))).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
 
-}
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("disease_notifications", "Disease Notifications", NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("inform about Diseases and its detail");
+            channel.enableLights(true);
+            channel.setLightColor(Color.MAGENTA);
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            manager.createNotificationChannel(channel);
+        }
+        Intent notificationIntent = new Intent(MainActivity.this, disease_detail.class);
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        notificationIntent.putExtra("disease_data",new Gson().toJson(diseases.get(id)));
+        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder nb = new NotificationCompat.Builder(getBaseContext(), "disease_notifications");
+        nb.setContentIntent(pendingIntent);
+        nb.setLargeIcon(BitmapFactory.decodeResource(getResources(),diseases.get(id).getImage()));
+        nb.setContentTitle("Your Crop may get "+diseases.get(id).getName()+" that is the "+diseases.get(id).getType());
+        nb.setContentText(diseases.get(id).getTrigger());
+        nb.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(BitmapFactory.decodeResource(getResources(),diseases.get(id).getImage())));
+        nb.setPriority(NotificationCompat.PRIORITY_HIGH);
+        nb.setSmallIcon(R.drawable.logo);
+        nb.setSound(RingtoneManager.getActualDefaultRingtoneUri(getBaseContext(), RingtoneManager.TYPE_NOTIFICATION));
+        nb.setDefaults(NotificationCompat.FLAG_SHOW_LIGHTS | NotificationCompat.DEFAULT_VIBRATE);
+        nb.setLights(Color.BLUE, 5000, 5000);
+        nb.setWhen(System.currentTimeMillis());
+        nb.setTicker("New Disease Based Info");
+        NotificationManagerCompat nmc = NotificationManagerCompat.from(MainActivity.this);
+        nmc.notify(100003, nb.build());
+    }
+    }

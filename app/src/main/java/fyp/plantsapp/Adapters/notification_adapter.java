@@ -11,10 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 import fyp.plantsapp.Model.Notifications;
 import fyp.plantsapp.R;
+import fyp.plantsapp.disease_detail;
 import fyp.plantsapp.procedure_details;
 
 public class notification_adapter extends RecyclerView.Adapter<notification_adapter.notification_viewholder> {
@@ -41,6 +44,8 @@ public class notification_adapter extends RecyclerView.Adapter<notification_adap
             public void onClick(View v) {
                 if(notificationsArrayList.get(position).getVideoId()!=null){
                     context.startActivity(new Intent(context, procedure_details.class).putExtra("videoId",notificationsArrayList.get(position).getVideoId()));
+                }else if(notificationsArrayList.get(position).getDiseases()!=null){
+                    context.startActivity(new Intent(context, disease_detail.class).putExtra("disease_data",new Gson().toJson(notificationsArrayList.get(position).getDiseases())));
                 }
             }
         });

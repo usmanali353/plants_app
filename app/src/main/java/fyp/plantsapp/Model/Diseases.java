@@ -6,6 +6,15 @@ public class Diseases {
     String name;
     String type;
     int image;
+    String trigger;
+
+    public String getTrigger() {
+        return trigger;
+    }
+
+    public void setTrigger(String trigger) {
+        this.trigger = trigger;
+    }
 
     public int getImage() {
         return image;
@@ -59,12 +68,17 @@ public class Diseases {
         this.preventive_measures = preventive_measures;
     }
 
-    public Diseases(String name, String type, List<String> sprays, List<String> symptoms, List<String> preventive_measures,int image) {
+    public Diseases() {
+
+    }
+
+    public Diseases(String name, String type, List<String> sprays, List<String> symptoms, List<String> preventive_measures, int image, String trigger) {
         this.name = name;
         this.type = type;
         this.sprays = sprays;
         this.symptoms = symptoms;
         this.preventive_measures = preventive_measures;
         this.image=image;
+        this.trigger=trigger;
     }
 }

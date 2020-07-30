@@ -3,6 +3,15 @@ package fyp.plantsapp.Model;
 public class Notifications {
    private String title;
     private String message;
+   private Diseases diseases;
+
+    public Diseases getDiseases() {
+        return diseases;
+    }
+
+    public void setDiseases(Diseases diseases) {
+        this.diseases = diseases;
+    }
 
     public String getVideoId() {
         return videoId;
@@ -46,10 +55,11 @@ public class Notifications {
         this.message = message;
     }
 
-    public Notifications(String title, String message,String date,String videoId) {
+    public Notifications(String title, String message,String date,String videoId,Diseases diseases) {
         this.title = title;
         this.message = message;
         this.date=date;
         this.videoId=videoId;
+        this.diseases=diseases;
     }
 }

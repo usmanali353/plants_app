@@ -33,7 +33,6 @@ dependencies {
     implementation "androidx.preference:preference:1.1.1"
     implementation 'com.google.firebase:firebase-firestore:21.5.0'
     implementation 'com.github.prabhat1707:EasyWayLocation:2.0'
-    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     implementation 'com.tomer:fadingtextview:2.5'
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
     implementation 'androidx.navigation:navigation-fragment:2.3.0'

@@ -4,12 +4,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.barteksc.pdfviewer.PDFView;
-
-import fyp.plantsapp.Adapters.procedures_list_adapter;
 
 public class wheat_farming_procedures extends AppCompatActivity {
   PDFView pdfView;

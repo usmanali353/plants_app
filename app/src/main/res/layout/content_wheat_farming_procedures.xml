@@ -5,15 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:videoId="dOQ626z7E8I"
-        app:showFullScreenButton="false"
-        />
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/procedures_list"
-        />
+     <com.github.barteksc.pdfviewer.PDFView
+         android:id="@+id/pdfView"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent" />
 </LinearLayout>

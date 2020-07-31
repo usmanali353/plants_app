@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/background"
-
+    android:background="@android:color/black"
     android:layout_height="match_parent">
    <ImageView
        android:layout_width="150dp"
@@ -19,7 +18,7 @@
        android:layout_below="@+id/logo"
        android:layout_centerHorizontal="true"
        android:layout_marginTop="16dp"
-       android:textColor="@android:color/black"
+       android:textColor="@android:color/white"
        android:textSize="30dp"
        app:texts="@array/fading"
        app:timeout="1000">

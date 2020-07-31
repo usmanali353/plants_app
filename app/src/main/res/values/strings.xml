@@ -19,7 +19,7 @@
     <string name="weather_thunder"></string>
 
     <string name="weather_drizzle"></string>
-    <string name="title_activity_crop__videos">Crops Informative Videos</string>
+    <string name="title_activity_crop__videos">فصلوں کی معلوماتی ویڈیوز</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -29,8 +29,8 @@
     <string name="drawer_close">Drawer Close</string>
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="title_activity_wheat_farming_procedures">Wheat Forming Procedure</string>
-    <string name="title_activity_notifications_page">Notifications</string>
+    <string name="title_activity_wheat_farming_procedures">گندم کی کاشتکاری کا طریقہ کار</string>
+    <string name="title_activity_notifications_page">اطلاعات</string>
     <string-array name="crop_stages">
         <item>Preparation of Land</item>
         <item>Sowing of Seeds</item>
@@ -44,6 +44,6 @@
         <item>To</item>
         <item>Harvest</item>
     </string-array>
-    <string name="title_activity_procedure_details">Procedure Details</string>
-    <string name="title_activity_diseases_list">Diseases</string>
+    <string name="title_activity_procedure_details">طریقہ کار کی تفصیلات</string>
+    <string name="title_activity_diseases_list">کیڑے اور بیماریاں</string>
 </resources>

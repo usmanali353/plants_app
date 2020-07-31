@@ -4,37 +4,37 @@
       tools:context=".MainActivity">
     <item
         android:id="@+id/farming_procedures"
-        android:title="Forming Procedures"
+        android:title="کاشتکاری کا طریقہ کار"
         android:icon="@drawable/ic_assignment_white_24dp"
         />
     <item
         android:id="@+id/insecticide"
-        android:title="Insecticides"
+        android:title="کیڑے اور بیماریاں"
         android:icon="@drawable/insecticide"
         />
     <item
         android:id="@+id/crop_videos"
-        android:title="Crop Videos"
+        android:title="فصلوں کی معلوماتی ویڈیوز"
         android:icon="@drawable/ic_videocam_white_24dp"
        />
     <item
         android:id="@+id/profile"
-        android:title="Profile"
+        android:title="پروفائل"
         android:icon="@drawable/ic_person_white_24dp"
         />
     <item
         android:id="@+id/help"
-        android:title="Help"
+        android:title="چیٹ بوٹ"
         android:icon="@drawable/ic_help_white_24dp"
         />
     <item
         android:id="@+id/notification"
-        android:title="Notifications"
+        android:title="اطلاعات"
         android:icon="@drawable/ic_notifications_white_24dp"
         />
     <item
         android:id="@+id/sign_out"
         android:icon="@drawable/logout"
-        android:title="Sign Out"
+        android:title="باہر جائیں"
        />
 </menu>

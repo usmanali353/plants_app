@@ -37,7 +37,7 @@ public class disease_detail extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ctbl=findViewById(R.id.collapse_toolbar);
-        ctbl.setTitle("Symptoms");
+        ctbl.setTitle("علامات");
         diseases=new Gson().fromJson(getIntent().getStringExtra("disease_data"),Diseases.class);
         collaspingtoolbarimage=findViewById(R.id.bgheader);
         if(diseases!=null){
@@ -51,33 +51,33 @@ public class disease_detail extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if(tab.getPosition()==0){
-                    ctbl.setTitle("Symptoms");
+                    ctbl.setTitle("علامات");
                 }else if(tab.getPosition()==1){
-                    ctbl.setTitle("Precautionary Measures");
+                    ctbl.setTitle("احتیاطی تدابیر");
                 }else{
-                    ctbl.setTitle("Treatment");
+                    ctbl.setTitle("علاج");
                 }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 if(tab.getPosition()==0){
-                    ctbl.setTitle("Symptoms");
+                    ctbl.setTitle("علامات");
                 }else if(tab.getPosition()==1){
-                    ctbl.setTitle("Precautionary Measures");
+                    ctbl.setTitle("احتیاطی تدابیر");
                 }else{
-                    ctbl.setTitle("Treatment");
+                    ctbl.setTitle("علاج");
                 }
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 if(tab.getPosition()==0){
-                    ctbl.setTitle("Symptoms");
+                    ctbl.setTitle("علامات");
                 }else if(tab.getPosition()==1){
-                    ctbl.setTitle("Precautionary Measures");
+                    ctbl.setTitle("احتیاطی تدابیر");
                 }else{
-                    ctbl.setTitle("Treatment");
+                    ctbl.setTitle("علاج");
                 }
             }
         });
@@ -86,11 +86,11 @@ public class disease_detail extends AppCompatActivity {
 
         viewpageradapter vpa=new viewpageradapter(getSupportFragmentManager());
 
-        vpa.addfragment(new symptoms_fragment(),"Symptoms");
+        vpa.addfragment(new symptoms_fragment(),"علامات");
 
-        vpa.addfragment(new preventive_mesaures_fragment(),"Preventive Measures");
+        vpa.addfragment(new preventive_mesaures_fragment(),"احتیاطی تدابیر");
 
-        vpa.addfragment(new sprays_fragment(),"Treatment");
+        vpa.addfragment(new sprays_fragment(),"علاج");
 
         vp.setAdapter(vpa);
 

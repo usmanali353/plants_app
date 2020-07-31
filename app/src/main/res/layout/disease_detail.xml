@@ -4,12 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/details"
-        android:drawableStart="@drawable/bullet"
         android:layout_margin="8dp"
         android:drawablePadding="8dp"
+        android:layoutDirection="rtl"
+        android:gravity="start"
+        android:drawableStart="@drawable/bullet"
         android:text="Cultivate disease resistant variables if available"
         />
 

@@ -20,10 +20,12 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,6 +67,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
 import fyp.plantsapp.Model.Diseases;
@@ -295,39 +298,34 @@ public class MainActivity extends AppCompatActivity implements Listener {
                     mWeather.setText(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")));
                     Date c = Calendar.getInstance().getTime();
                     SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
                     String formattedDate = df.format(c);
+                    try{
+                        Date d=sdf.parse(userInfo.getStartDate());
+                        Log.e("time", String.valueOf(d.getTime()));
+                        long week = TimeUnit.MILLISECONDS.toDays( d.getTime()-c.getTime());
+                        Log.e("days", String.valueOf(week));
+                    }catch(Exception e){
+                        Log.e("exp",e.getMessage());
+                    }
                     if(prefs.getString("current_date",null)==null||!prefs.getString("current_date",null).equals(formattedDate)) {
                         populate_diseases_list();
-                        if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&userInfo.getCropCurrentStage().equals("Harvesting")){
-                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "There are Chances of Rain not a better time for Harvesting");
-                        }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&userInfo.getCropCurrentStage().equals("Sowing Seeds")){
-                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "There are Chances of Rain ");
-                        }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&userInfo.getCropCurrentStage().equals("Irrigation")){
-                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "There are Chances of Rain rain will provide necessery moisture to Crops");
-                        }else {
-                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "Act According to Weather");
-                        }
-                        if(userInfo.getCropCurrentStage().equals("Preparation of Land")){
-                             create_notification_for_procedures("Your Crop is on Preparation of Land Stage","Land Preparation Tips","F0VbCrUxLMk");
-                        }else if(userInfo.getCropCurrentStage().equals("Sowing of Seeds")){
-                            create_notification_for_procedures("Your Crop is on Sowing of Seed Stage","comparison between Drill and Broadcast Sowing Method in Wheat","gVqwCICv-1Q");
-                        }else if(userInfo.getCropCurrentStage().equals("Irrigation")){
-                            create_notification_for_procedures("Your Crop is Irrigation Stage","Tips on Irrigation","wJyLrxLCJ6U");
-                        }else if(userInfo.getCropCurrentStage().equals("Adding Fertilizers")){
-                            create_notification_for_procedures("Your Crop is Adding Fertilizers Stage","Tips on Using Fertilizers in Wheat Crop","bh1QzRf2wfQ");
-                        }else if(userInfo.getCropCurrentStage().equals("Removal of Weeds")){
-                            create_notification_for_procedures("Your Crop is on Removing Stage","Removing Weed Tips","JnxXX2cjqVo");
-                        }else if(userInfo.getCropCurrentStage().equals("Harvesting")){
-                            create_notification_for_procedures("Your Crop is on Harvesting Stage","Harvesting Info","CkKdOnaRQn0");
-                        }
+                        //TODO
+//                        if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&userInfo.getCropCurrentStage().equals("Harvesting")){
+//                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "There are Chances of Rain not a better time for Harvesting");
+//                        }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&userInfo.getCropCurrentStage().equals("Sowing Seeds")){
+//                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "There are Chances of Rain ");
+//                        }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&userInfo.getCropCurrentStage().equals("Irrigation")){
+//                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "There are Chances of Rain rain will provide necessery moisture to Crops");
+//                        }else {
+//                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "Act According to Weather");
+//                        }
                     }
                     setWeatherIcon(Integer.parseInt(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("id"))), mWeatherIcon);
                     for (int i = 1; i < sevenDayWeatherArray.length(); i++) {
                         forecasts.add(new Forecast(String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONObject("temp").get("max")), String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONObject("temp").get("min")), String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONArray("weather").getJSONObject(0).get("description")), String.valueOf(sevenDayWeatherArray.getJSONObject(i).getJSONArray("weather").getJSONObject(0).get("id")), String.valueOf(sevenDayWeatherArray.getJSONObject(i).get("dt"))));
                     }
                     mListViewForecast.setAdapter(new ForecastAdapter(MainActivity.this, forecasts));
-
-                // SetListViewHeight.setListViewHeight(mListViewForecast);
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -430,14 +428,10 @@ public class MainActivity extends AppCompatActivity implements Listener {
         View v= LayoutInflater.from(MainActivity.this).inflate(R.layout.profile_page,null);
         final TextInputEditText name=v.findViewById(R.id.name_txt);
         final TextInputEditText email=v.findViewById(R.id.email_txt);
-        MaterialSpinner cropcurrentStage=v.findViewById(R.id.cropcurrentstage);
+        Button startDate=v.findViewById(R.id.start_date);
         name.setText(userInfo.getName());
         email.setText(userInfo.getEmail());
-        for (int i=0;i<getResources().getStringArray(R.array.crop_stages).length;i++){
-            if(getResources().getStringArray(R.array.crop_stages)[i].equals(userInfo.getCropCurrentStage())){
-                cropcurrentStage.setSelection(i+1);
-            }
-        }
+        startDate.setText(userInfo.getStartDate());
         //cropcurrentStage.setSelection();
         android.app.AlertDialog profile_dialog=new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Profile")
@@ -463,13 +457,11 @@ public class MainActivity extends AppCompatActivity implements Listener {
                     email.setError("Enter Email");
                 }else if(!isValidEmail(email.getText().toString())){
                     email.setError("Invalid Email");
-                }else if(cropcurrentStage.getSelectedItem()==null){
-                    cropcurrentStage.setError("Select Crop Current Stage");
                 }else{
                     Map<String,Object> map=new HashMap<>();
                     map.put("name",name.getText().toString());
                     map.put("email",email.getText().toString());
-                    map.put("cropCurrentStage",cropcurrentStage.getSelectedItem().toString());
+                    map.put("cropCurrentStage",startDate.getText().toString());
                     ProgressDialog pd=new ProgressDialog(MainActivity.this);
                     pd.setMessage("Updating Profile...");
                     pd.show();
@@ -478,7 +470,7 @@ public class MainActivity extends AppCompatActivity implements Listener {
                         public void onComplete(@NonNull Task<Void> task) {
                             pd.dismiss();
                             if(task.isSuccessful()){
-                                prefs.edit().putString("user_info",new Gson().toJson(new user(name.getText().toString(),email.getText().toString(),FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(),cropcurrentStage.getSelectedItem().toString()))).apply();
+                                prefs.edit().putString("user_info",new Gson().toJson(new user(name.getText().toString(),email.getText().toString(),FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(),startDate.getText().toString()))).apply();
                                 startActivity(new Intent(MainActivity.this,MainActivity.class));
                                 finish();
                             }

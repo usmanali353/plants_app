@@ -1,27 +1,27 @@
 package fyp.plantsapp.Model;
 
 public class user {
-        public user(String name, String email,String phone,String cropCurrentStage) {
+        public user(String name, String email,String phone,String startDate) {
             this.name = name;
             this.email = email;
             this.phone=phone;
-            this.cropCurrentStage=cropCurrentStage;
+            this.startDate=startDate;
         }
         public user(){
 
         }
         private String name;
         private String email;
-        private String cropCurrentStage;
 
-    public String getCropCurrentStage() {
-        return cropCurrentStage;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setCropCurrentStage(String cropCurrentStage) {
-        this.cropCurrentStage = cropCurrentStage;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
 
+    private String startDate;
     public String getPhone() {
             return phone;
         }

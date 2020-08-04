@@ -316,7 +316,6 @@ public class MainActivity extends AppCompatActivity implements Listener {
                     }
                     if(prefs.getString("current_date",null)==null||!prefs.getString("current_date",null).equals(formattedDate)) {
                         populate_diseases_list();
-
                         if(weeks<3){
                             create_notification_for_procedures("آپ کی فصل فی الحال بیجوں کی بوائی کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","gVqwCICv-1Q");
                         }else if(weeks==3){

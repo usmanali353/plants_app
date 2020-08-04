@@ -301,12 +301,15 @@ public class MainActivity extends AppCompatActivity implements Listener {
                     SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
                     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
                     String formattedDate = df.format(c);
-                    Log.e("startDate",userInfo.getStartDate());
                     try{
                         Date d=sdf.parse(userInfo.getStartDate());
-                         days = TimeUnit.MILLISECONDS.toDays( d.getTime()-c.getTime());
+                         days = TimeUnit.MILLISECONDS.toDays( c.getTime()-d.getTime());
                          weeks=days/7;
+                        Log.e("current",formattedDate);
+                        Log.e("saved",prefs.getString("current_date",""));
+                        Log.e("startDate",userInfo.getStartDate());
                          Log.e("weeks",String.valueOf(weeks));
+                        Log.e("days",String.valueOf(days));
                     }catch(Exception e){
                         Log.e("exp",e.getMessage());
                         e.printStackTrace();

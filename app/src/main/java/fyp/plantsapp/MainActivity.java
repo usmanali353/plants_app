@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements Listener {
     DrawerLayout drawerLayout;
     NavigationView nv;
     user userInfo;
+    long days,weeks;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -300,16 +301,32 @@ public class MainActivity extends AppCompatActivity implements Listener {
                     SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
                     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
                     String formattedDate = df.format(c);
+                    Log.e("startDate",userInfo.getStartDate());
                     try{
                         Date d=sdf.parse(userInfo.getStartDate());
-                        Log.e("time", String.valueOf(d.getTime()));
-                        long week = TimeUnit.MILLISECONDS.toDays( d.getTime()-c.getTime());
-                        Log.e("days", String.valueOf(week));
+                         days = TimeUnit.MILLISECONDS.toDays( d.getTime()-c.getTime());
+                         weeks=days/7;
+                         Log.e("weeks",String.valueOf(weeks));
                     }catch(Exception e){
                         Log.e("exp",e.getMessage());
+                        e.printStackTrace();
                     }
                     if(prefs.getString("current_date",null)==null||!prefs.getString("current_date",null).equals(formattedDate)) {
                         populate_diseases_list();
+
+                        if(weeks<3){
+                            create_notification_for_procedures("آپ کی فصل فی الحال بیجوں کی بوائی کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","gVqwCICv-1Q");
+                        }else if(weeks==3){
+                            create_notification_for_procedures("آپ کی فصل فی الحال نقصان دہ جڑی بوٹیاں کاٹنے کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","1qST-yMIp9Y");
+                        }else if(weeks==4){
+                            create_notification_for_procedures("آپ کی فصل کھاد ڈالنے کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","bh1QzRf2wfQ");
+                        }else if(weeks==9){
+                          populate_diseases_list();
+                        }else if(weeks==14){
+                            populate_diseases_list();
+                        }else if(weeks==16){
+                            create_notification_for_procedures("آپ کی فصل کٹائی کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","bh1QzRf2wfQ");
+                        }
                         //TODO
 //                        if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&userInfo.getCropCurrentStage().equals("Harvesting")){
 //                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "There are Chances of Rain not a better time for Harvesting");

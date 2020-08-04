@@ -18,7 +18,9 @@
         <activity
             android:name=".diseases_list"
             android:label="@string/title_activity_diseases_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".procedure_details"
             android:label="@string/title_activity_procedure_details"

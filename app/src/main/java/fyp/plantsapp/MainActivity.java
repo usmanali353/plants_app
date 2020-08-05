@@ -316,8 +316,10 @@ public class MainActivity extends AppCompatActivity implements Listener {
                     }
                     if(prefs.getString("current_date",null)==null||!prefs.getString("current_date",null).equals(formattedDate)) {
                         populate_diseases_list();
-                        if(weeks<3){
+                        if(weeks==1){
                             create_notification_for_procedures("آپ کی فصل فی الحال بیجوں کی بوائی کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","gVqwCICv-1Q");
+                        }else if(weeks==2){
+                            create_notification_for_procedures("آپ کی فصل پہلی آبپاشی کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","Vzf3r5epgtQ");
                         }else if(weeks==3){
                             create_notification_for_procedures("آپ کی فصل فی الحال نقصان دہ جڑی بوٹیاں کاٹنے کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","1qST-yMIp9Y");
                         }else if(weeks==4){
@@ -329,16 +331,34 @@ public class MainActivity extends AppCompatActivity implements Listener {
                         }else if(weeks==16){
                             create_notification_for_procedures("آپ کی فصل کٹائی کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","bh1QzRf2wfQ");
                         }
+
+                        if(days>20&&days<25){
+                            create_notification_for_procedures("آپ کی فصل دوسری آبپاشی کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","Vzf3r5epgtQ");
+                        }else if(days>35&&days<42){
+                            create_notification_for_procedures("آپ کی فصل تیسری آبپاشی کے مرحلے پر ہےآ","مزید تفصیلات کے لئے کلک کریں","Vzf3r5epgtQ");
+                        }else if(days>70&&days<84){
+                            create_notification_for_procedures("پ کی فصل چوتھے آبپاشی کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","Vzf3r5epgtQ");
+                        }else if(days>90&&days<105){
+                            create_notification_for_procedures("پ کی فصل پانچویں آبپاشی کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","Vzf3r5epgtQ");
+                        }
                         //TODO
-//                        if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&userInfo.getCropCurrentStage().equals("Harvesting")){
-//                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "There are Chances of Rain not a better time for Harvesting");
-//                        }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&userInfo.getCropCurrentStage().equals("Sowing Seeds")){
-//                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "There are Chances of Rain ");
-//                        }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&userInfo.getCropCurrentStage().equals("Irrigation")){
-//                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "There are Chances of Rain rain will provide necessery moisture to Crops");
-//                        }else {
-//                            create_notification("Today Temperature is " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "Act According to Weather");
-//                        }
+                        if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&days>20&&days<25){
+                            create_notification("آج درجہ حرارت ہے " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "بارش کے بارش کے امکانات فصلوں کو مطلوبہ نمی فراہم کریں گے");
+                        }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&weeks==16){
+                            create_notification(" آج درجہ حرارت ہے " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "صل کی کٹائی کے لئے یہ مناسب وقت نہیں ہے کیونکہ بارش کے امکانات موجود ہیں");
+                        }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&weeks==3){
+                            create_notification(" آج درجہ حرارت ہے " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "بارش کے امکانات موجود ہیں یہ نقصان دہ جڑی بوٹیاں کاٹنے کا مناسب وقت نہیں ہے");
+                        }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&days>35&&days<42){
+                            create_notification("آج درجہ حرارت ہے " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "بارش کے بارش کے امکانات فصلوں کو مطلوبہ نمی فراہم کریں گے");
+                        }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&days>70&&days<84){
+                            create_notification("آج درجہ حرارت ہے " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "بارش کے بارش کے امکانات فصلوں کو مطلوبہ نمی فراہم کریں گے");
+                        }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&days>90&&days<105){
+                            create_notification("آج درجہ حرارت ہے " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "بارش کے بارش کے امکانات فصلوں کو مطلوبہ نمی فراہم کریں گے");
+                        }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&weeks==2){
+                            create_notification("آج درجہ حرارت ہے " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "بارش کے بارش کے امکانات فصلوں کو مطلوبہ نمی فراہم کریں گے");
+                        }else {
+                            create_notification(" آج درجہ حرارت ہے " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "Act According to Weather");
+                        }
                     }
                     setWeatherIcon(Integer.parseInt(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("id"))), mWeatherIcon);
                     for (int i = 1; i < sevenDayWeatherArray.length(); i++) {

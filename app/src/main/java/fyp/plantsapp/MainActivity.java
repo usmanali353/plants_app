@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements Listener {
         LocationRequest request = new LocationRequest();
         request.setInterval(10000);
         request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        easyWayLocation = new EasyWayLocation(this,request, false, this);
+        easyWayLocation = new EasyWayLocation(this,request, true, this);
         //arrayListForecast = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements Listener {
     }
     @Override
     public void locationOn() {
-
+       easyWayLocation.startLocation();
     }
 
     @Override
@@ -341,7 +341,6 @@ public class MainActivity extends AppCompatActivity implements Listener {
                         }else if(days>90&&days<105){
                             create_notification_for_procedures("پ کی فصل پانچویں آبپاشی کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","Vzf3r5epgtQ");
                         }
-                        //TODO
                         if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&days>20&&days<25){
                             create_notification("آج درجہ حرارت ہے " + String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONObject("temp").get("day")) + (char) 0x00B0+" and  "+String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).toLowerCase(), "بارش کے بارش کے امکانات فصلوں کو مطلوبہ نمی فراہم کریں گے");
                         }else if(String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Rain")||String.valueOf(sevenDayWeatherArray.getJSONObject(0).getJSONArray("weather").getJSONObject(0).get("description")).contains("Clouds")&&weeks==16){

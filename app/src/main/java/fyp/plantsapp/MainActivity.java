@@ -316,19 +316,22 @@ public class MainActivity extends AppCompatActivity implements Listener {
                     }
                     if(prefs.getString("current_date",null)==null||!prefs.getString("current_date",null).equals(formattedDate)) {
                         populate_diseases_list();
-                        if(weeks==1){
+                        if(days<=7){
                             create_notification_for_procedures("آپ کی فصل فی الحال بیجوں کی بوائی کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","gVqwCICv-1Q");
-                        }else if(weeks==2){
+                        }
+                        if(days>7&&days<=14){
                             create_notification_for_procedures("آپ کی فصل پہلی آبپاشی کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","Vzf3r5epgtQ");
-                        }else if(weeks==3){
+                        }
+                        if(days>14&&days<=21){
                             create_notification_for_procedures("آپ کی فصل فی الحال نقصان دہ جڑی بوٹیاں کاٹنے کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","1qST-yMIp9Y");
-                        }else if(weeks==4){
+                        }
+                        if(days>21&&days<=28){
                             create_notification_for_procedures("آپ کی فصل کھاد ڈالنے کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","bh1QzRf2wfQ");
-                        }else if(weeks==9){
+                        } if(days>63&&days<=70){
                           populate_diseases_list();
-                        }else if(weeks==14){
+                        } if(days>98&&days<=105){
                             populate_diseases_list();
-                        }else if(weeks==16){
+                        } if(days>112&&days<=119){
                             create_notification_for_procedures("آپ کی فصل کٹائی کے مرحلے پر ہے","مزید تفصیلات کے لئے کلک کریں","bh1QzRf2wfQ");
                         }
 
@@ -579,7 +582,7 @@ public class MainActivity extends AppCompatActivity implements Listener {
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
         String formattedDate = df.format(c);
-        FirebaseFirestore.getInstance().collection("notifications").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("user_notification").document().set(new Notifications("Your Crop may get "+diseases.get(id).getName()+" that is the "+diseases.get(id).getType(),diseases.get(id).getTrigger(),formattedDate,null,diseases.get(id))).addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseFirestore.getInstance().collection("notifications").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("user_notification").document().set(new Notifications("آپ کے پودے کو  "+diseases.get(id).getName()+" جو "+diseases.get(id).getType(),diseases.get(id).getTrigger(),formattedDate,null,diseases.get(id))).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
